@@ -20,14 +20,14 @@ uint64_t	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-uint64_t	ft_msleep(int time)
+void	ft_msleep(uint64_t time)
 {
 	uint64_t		start;
-	uint64_t		end;
+//	uint64_t		end;
 	start = get_time();
-	while ((get_time() - start) < (uint64_t)time)
+	while ((get_time() - start) < time)
 		usleep(100);
-	end = get_time();
+//	end = get_time();
 	//printf("%llu\n" , end - start);
-	return (end - start);
+//	return (end - start);
 }

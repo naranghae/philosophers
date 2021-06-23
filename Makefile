@@ -15,8 +15,9 @@ SRC_DIR = ./src/
 SRC_NAME = main.c \
 			util.c \
 			time.c \
-			error.c \
-			init_info.c
+			free_error.c \
+			init_info.c \
+			eat_forks.c
 
 
 
@@ -27,7 +28,7 @@ OBJ_NAME = $(SRC_NAME:.c=.o)
 OBJ = $(addprefix $(OBJ_DIR),$(OBJ_NAME))
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address -pthread
 INCLUDE = -I./src/include
 
 all : $(NAME)

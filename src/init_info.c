@@ -25,31 +25,22 @@ void		info_state(t_pstate *state, int arg, char **argv)
 	state->philos = NULL;
 }
 
-void		init_mutex(t_pstate *state)
-{
-	int		i;
-
-	i = -1;
-	while (++i < state->nophilo)
-		pthread_mutex_init(&state->m_forks[i], NULL);
-}
-
 int			init_state(t_pstate *state, int arg, char **argv)
 {
 	info_state(state, arg, argv);
 	if (state->nophilo < 1)
-		return (error(NO_PHILO));
+		return (error(NO_PHILO, state));
 	if (!(state->philos = malloc(sizeof(*state->philos) * state->nophilo)))
-		return (error(MALLOC_ERROR));
+		return (error(MALLOC_ERROR, state));
 	if (!(state->m_forks = (pthread_mutex_t *)malloc(sizeof(*state->m_forks) *
 			state->nophilo)))
-		return (error(MALLOC_ERROR));
-	init_mutex(state);
-	init_philo(state);
+		return (error(MALLOC_ERROR, state));
+	if (init_philo(state))
+		return (error(MUTEX_ERROR, state));
 	return (0);
 }
 
-void		init_philo(t_pstate *state)
+int			init_philo(t_pstate *state)
 {
 	int		i;
 
@@ -59,9 +50,14 @@ void		init_philo(t_pstate *state)
 		state->philos[i].pos = i;
 		state->philos[i].eat_cnt = 0;
 		state->philos[i].l_fork = i;
-		state->philos[i].state = state;
 		state->philos[i].r_fork = (i + 1) % (state->nophilo);
-		pthread_mutex_init(&state->philos[i].mutex, NULL);
-		pthread_mutex_init(&state->philos[i].m_eat, NULL);
+		state->philos[i].state = state;
+		if (pthread_mutex_init(&state->philos[i].m_eating, NULL))
+			return (1);
+		if (pthread_mutex_init(&state->m_forks[i], NULL))
+			return (1);
 	}
+	if (pthread_mutex_init(&state->message, NULL))
+		return (1);
+	return (0);
 }
