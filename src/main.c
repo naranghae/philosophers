@@ -6,21 +6,20 @@
 /*   By: chanykim <chanykim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 14:26:08 by chanykim          #+#    #+#             */
-/*   Updated: 2021/06/22 17:38:24 by chanykim         ###   ########.fr       */
+/*   Updated: 2021/06/24 21:03:15 by chanykim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*monitor(void *philo)
+void	*monitor(void *state)
 {
-	t_philo			*philos;
-	pthread_t		tid;
-	philos = (t_philo *)philo;
-	tid = pthread_self();
-	printf("monitor: thread_id[%d]: %ld\n",philos->pos ,tid);
-	printf("monitor: philo_id[%d]: %ld\n",philos->pos ,philos->id);
-	sleep(4);
+	t_pstate			*states;
+	states = (t_pstate *)state;
+
+
+	//if (states->philos[] == states->musteat)
+
 	return ((void*)0);
 }
 
@@ -28,11 +27,17 @@ void	*dining(void *philo)
 {
 	t_philo			*philos;
 	pthread_t		tid;
+
 	philos = (t_philo *)philo;
-	philos->last_eat = get_time();
-	if (pthread_create(&tid, NULL, monitor, (void *)&philo))
-		return ((void *)1);
-	
+
+	pthread_create(&tid, NULL, monitor, (void *)&philos->state);
+	pthread_detach(tid);
+	while (1)
+	{
+		pick_fork(philos);
+		eating(philos);
+		return_fork(philos);
+	}
 	return ((void*)0);
 }
 
@@ -53,14 +58,14 @@ int			main(int arg, char **argv) // argv: [1]철학자 수 [2]죽을 시간 [3]�
 	state.start_time = get_time();
 	while (++i < state.nophilo)
 	{
-		if (pthread_create(&state.philos[i].id, NULL, dining, (void *)&state.philos[i]))
-			return (error(THREAD_ERROR, &state));
+		pthread_create(&state.philos[i].id, NULL, dining, (void *)&state.philos[i]);
+		pthread_detach(state.philos[i].id);
 	}
 	i = -1;
 	while (++i < state.nophilo)
 			pthread_join(state.philos[i].id, NULL);
 	free_philo(&state);
 	//for(;;){}
-	
+
 	return (0);
 }

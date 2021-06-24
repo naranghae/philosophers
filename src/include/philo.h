@@ -6,7 +6,7 @@
 /*   By: chanykim <chanykim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 14:34:41 by chanykim          #+#    #+#             */
-/*   Updated: 2021/06/22 17:21:25 by chanykim         ###   ########.fr       */
+/*   Updated: 2021/06/24 20:10:52 by chanykim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@
 # include <stdlib.h>
 # define MALLOC_ERROR	1
 # define NO_PHILO		2
-# define THREAD_ERROR	3
-# define MUTEX_ERROR	4
+# define MUTEX_ERROR	3
 
-typedef unsigned long long	uint64_t;
+//typedef unsigned long long	uint64_t;
 
 typedef struct			s_philo
 {
@@ -33,7 +32,7 @@ typedef struct			s_philo
 	int					l_fork;
 	int					eat_cnt;
 	int					eat_time;
-	uint64_t			last_eat;
+	uint64_t			start_time;
 	pthread_mutex_t		m_eating;
 	struct s_pstate		*state;
 }						t_philo;

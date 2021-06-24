@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   free_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanykim <chanykim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 16:55:27 by chanykim          #+#    #+#             */
-/*   Updated: 2021/06/22 12:44:50 by chanykim         ###   ########.fr       */
+/*   Updated: 2021/06/24 20:17:30 by chanykim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		first_error(int arg, char **argv)
 {
 	if (is_digit(argv) || (arg < 5 || arg > 6))
 	{
-		write(1, "argument_error\n", 15);
+		printf( "argument_error\n");
 		return (1);
 	}
 	return (0);
@@ -24,14 +24,12 @@ int		first_error(int arg, char **argv)
 
 int		error(int error, t_pstate *state)
 {
-	if (error == THREAD_ERROR)
-		write(1, "Thread_create_error.\n", 21);
-	else if (error == MALLOC_ERROR)
-		write(1, "malloc_error\n", 13);
+	if (error == MALLOC_ERROR)
+		printf("malloc_error\n");
 	else if (error == NO_PHILO)
-		write(1, "Include at least 1 philosopher.\n", 32);
+		printf("Include at least 1 philosopher.\n");
 	else if (error == MUTEX_ERROR)
-		write(1, "mutex_error\n", 12);
+		printf("mutex_error\n");
 	if (error > 0)
 	{
 		free_philo(state);
