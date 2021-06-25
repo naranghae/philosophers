@@ -22,45 +22,46 @@
 # define NO_PHILO		2
 # define MUTEX_ERROR	3
 
-//typedef unsigned long long	uint64_t;
+typedef unsigned long long	uint64_t;
 
 typedef struct			s_philo
 {
-	pthread_t			id;
 	int					pos;
 	int					r_fork;
 	int					l_fork;
 	int					eat_cnt;
 	int					eat_time;
-	uint64_t			start_time;
+	uint64_t			last_eat;
 	pthread_mutex_t		m_eating;
-	struct s_pstate		*state;
+	struct s_info		*info;
 }						t_philo;
 
-typedef struct			s_pstate
+typedef struct			s_info
 {
 	int					nophilo;
 	uint64_t			ttdie;
 	uint64_t			tteat;
 	uint64_t			ttsleep;
 	int					musteat;
+	int					finish_eat;
 	uint64_t			start_time;
-	uint64_t			time_pass;
 	t_philo				*philos;
 	pthread_mutex_t		*m_forks;
 	pthread_mutex_t		message;
-}						t_pstate;
+}						t_info;
 
 int						first_error(int arg, char **argv);
-int						init_state(t_pstate *state, int arg, char **argv);
-int						init_philo(t_pstate *state);
+int						init_state(t_info *info, int arg, char **argv);
+int						init_philo(t_info *info);
 int						ft_atoi(char *str);
 int						is_digit(char **str);
-int						error(int error, t_pstate *state);
+int						error(int error, t_info *info);
 uint64_t				get_time(void);
 void					ft_msleep(uint64_t time);
-void					free_philo(t_pstate *state);
+void					free_philo(t_info *info);
 void					pick_fork(t_philo *philo);
 void					return_fork(t_philo *philo);
 void					eating(t_philo *philo);
+int						mutex_destroy(t_info *info);
+int						malloc_free(t_info *info);
 #endif

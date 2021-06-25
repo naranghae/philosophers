@@ -28,7 +28,7 @@ OBJ_NAME = $(SRC_NAME:.c=.o)
 OBJ = $(addprefix $(OBJ_DIR),$(OBJ_NAME))
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread #-g3 -fsanitize=address
 INCLUDE = -I./src/include
 
 all : $(NAME)

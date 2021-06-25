@@ -12,52 +12,55 @@
 
 #include "philo.h"
 
-void		info_state(t_pstate *state, int arg, char **argv)
+void		info_state(t_info *info, int arg, char **argv)
 {
-	state->nophilo = ft_atoi(argv[1]);
-	state->ttdie = ft_atoi(argv[2]);
-	state->tteat =ft_atoi(argv[3]);
-	state->ttsleep = ft_atoi(argv[4]);
+	info->nophilo = ft_atoi(argv[1]);
+	info->ttdie = ft_atoi(argv[2]);
+	info->tteat =ft_atoi(argv[3]);
+	info->ttsleep = ft_atoi(argv[4]);
 	if (arg == 6)
-		state->musteat = ft_atoi(argv[5]);
+		info->musteat = ft_atoi(argv[5]);
 	else
-		state->musteat = 0;
-	state->philos = NULL;
+		info->musteat = 0;
+	info->finish_eat = 0;
+	info->philos = NULL;
+	info->m_forks = NULL;
 }
 
-int			init_state(t_pstate *state, int arg, char **argv)
+int			init_state(t_info *info, int arg, char **argv)
 {
-	info_state(state, arg, argv);
-	if (state->nophilo < 1)
-		return (error(NO_PHILO, state));
-	if (!(state->philos = malloc(sizeof(*state->philos) * state->nophilo)))
-		return (error(MALLOC_ERROR, state));
-	if (!(state->m_forks = (pthread_mutex_t *)malloc(sizeof(*state->m_forks) *
-			state->nophilo)))
-		return (error(MALLOC_ERROR, state));
-	if (init_philo(state))
-		return (error(MUTEX_ERROR, state));
+	info_state(info, arg, argv);
+	if (info->nophilo <= 1)
+		return (error(NO_PHILO, info));
+	if (!(info->philos = malloc(sizeof(*info->philos) * info->nophilo)))
+		return (error(MALLOC_ERROR, info));
+	if (!(info->m_forks = malloc(sizeof(pthread_mutex_t) *
+			info->nophilo)))
+		return (error(MALLOC_ERROR, info));
+	if (init_philo(info))
+		return (error(MUTEX_ERROR, info));
 	return (0);
 }
 
-int			init_philo(t_pstate *state)
+int			init_philo(t_info *info)
 {
 	int		i;
 
 	i = -1;
-	while (++i < state->nophilo)
+	while (++i < info->nophilo)
 	{
-		state->philos[i].pos = i;
-		state->philos[i].eat_cnt = 0;
-		state->philos[i].l_fork = i;
-		state->philos[i].r_fork = (i + 1) % (state->nophilo);
-		state->philos[i].state = state;
-		if (pthread_mutex_init(&state->philos[i].m_eating, NULL))
+		info->philos[i].pos = i;
+		info->philos[i].eat_cnt = 0;
+		info->philos[i].eat_time = 0;
+		info->philos[i].l_fork = i;
+		info->philos[i].r_fork = (i + 1) % (info->nophilo);
+		info->philos[i].info = info;
+		if (pthread_mutex_init(&info->philos[i].m_eating, NULL))
 			return (1);
-		if (pthread_mutex_init(&state->m_forks[i], NULL))
+		if (pthread_mutex_init(&info->m_forks[i], NULL))
 			return (1);
 	}
-	if (pthread_mutex_init(&state->message, NULL))
+	if (pthread_mutex_init(&info->message, NULL))
 		return (1);
 	return (0);
 }
