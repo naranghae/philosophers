@@ -23,6 +23,7 @@ void		info_state(t_info *info, int arg, char **argv)
 	else
 		info->musteat = 0;
 	info->finish_eat = 0;
+	info->quit = 0;
 	info->philos = NULL;
 	info->m_forks = NULL;
 }
@@ -49,12 +50,13 @@ int			init_philo(t_info *info)
 	i = -1;
 	while (++i < info->nophilo)
 	{
-		info->philos[i].pos = i;
+		info->philos[i].pos = i + 1;
 		info->philos[i].eat_cnt = 0;
 		info->philos[i].eat_time = 0;
 		info->philos[i].l_fork = i;
 		info->philos[i].r_fork = (i + 1) % (info->nophilo);
 		info->philos[i].info = info;
+		info->philos[i].must_eat_flag = 0;
 		if (pthread_mutex_init(&info->philos[i].m_eating, NULL))
 			return (1);
 		if (pthread_mutex_init(&info->m_forks[i], NULL))

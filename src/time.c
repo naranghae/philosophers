@@ -23,11 +23,8 @@ uint64_t	get_time(void)
 void	ft_msleep(uint64_t time)
 {
 	uint64_t		start;
-	uint64_t		end;
+
 	start = get_time();
 	while ((get_time() - start) < time)
 		usleep(100);
-	end = get_time();
-	printf("%llu\n" , end - start);
-//	return (end - start);
 }

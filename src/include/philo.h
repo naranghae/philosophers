@@ -21,16 +21,24 @@
 # define MALLOC_ERROR	1
 # define NO_PHILO		2
 # define MUTEX_ERROR	3
+# define PICKFORK		0
+# define EATING			1
+# define SLEEPING		2
+# define THINKING		3
+# define DIE			4
+# define EAT_FINISHED	5
 
 typedef unsigned long long	uint64_t;
 
 typedef struct			s_philo
 {
+	pthread_t			tid;
 	int					pos;
 	int					r_fork;
 	int					l_fork;
 	int					eat_cnt;
 	int					eat_time;
+	int					must_eat_flag;
 	uint64_t			last_eat;
 	pthread_mutex_t		m_eating;
 	struct s_info		*info;
@@ -44,6 +52,7 @@ typedef struct			s_info
 	uint64_t			ttsleep;
 	int					musteat;
 	int					finish_eat;
+	int					quit;
 	uint64_t			start_time;
 	t_philo				*philos;
 	pthread_mutex_t		*m_forks;
@@ -64,4 +73,6 @@ void					return_fork(t_philo *philo);
 void					eating(t_philo *philo);
 int						mutex_destroy(t_info *info);
 int						malloc_free(t_info *info);
+void					sleep_philo(t_philo *philo);
+void					timestamp(t_philo *philo, int type);
 #endif

@@ -17,7 +17,7 @@ void		eating(t_philo *philo)
 	pthread_mutex_lock(&philo->m_eating);
 	philo->last_eat = get_time();
 	philo->eat_time = 1;
-	//먹었다.
+	timestamp(philo, EATING);
 	ft_msleep(philo->info->tteat);
 	philo->eat_cnt++;
 	pthread_mutex_unlock(&philo->m_eating);
@@ -27,15 +27,20 @@ void		eating(t_philo *philo)
 void		pick_fork(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->info->m_forks[philo->l_fork]);
-	//들었다.
+	timestamp(philo, PICKFORK);
 	pthread_mutex_lock(&philo->info->m_forks[philo->r_fork]);
-	//들었다.
+	timestamp(philo, PICKFORK);
 }
 
 void		return_fork(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->info->m_forks[philo->r_fork]);
 	pthread_mutex_unlock(&philo->info->m_forks[philo->l_fork]);
-	//sleep
+}
+
+void		sleep_philo(t_philo *philo)
+{
+	timestamp(philo, SLEEPING);
 	ft_msleep(philo->info->ttsleep);
+	timestamp(philo, THINKING);
 }

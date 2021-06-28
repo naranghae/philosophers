@@ -17,7 +17,8 @@ SRC_NAME = main.c \
 			time.c \
 			free_error.c \
 			init_info.c \
-			eat_forks.c
+			eat_forks.c \
+			timestamp.c
 
 
 
